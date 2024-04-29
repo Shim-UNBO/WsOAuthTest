@@ -14,6 +14,7 @@ public class RestTemplateConfig {
 
     @Bean(name = "proxyRestTemplate")
     public RestTemplate restTemplate() {
+        System.out.println("restTemplate@@@@ om");
         HttpHost proxy = new HttpHost("krmp-proxy.9rum.cc", 3128);
         CloseableHttpClient httpClient = HttpClients.custom()
                 .setProxy(proxy)

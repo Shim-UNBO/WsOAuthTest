@@ -1,6 +1,8 @@
 package com.example.demo.config;
 
+import com.example.demo.oauth2.CustomAuthenticationFailureHandler;
 import com.example.demo.service.OAuth2UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
@@ -16,6 +18,8 @@ import java.nio.charset.StandardCharsets;
 @EnableMethodSecurity
 public class SecurityConfig {
     private final OAuth2UserService oAuth2UserService;
+    @Autowired
+    private CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
 
     public SecurityConfig(OAuth2UserService oAuth2UserService) {
         this.oAuth2UserService = oAuth2UserService;
@@ -23,11 +27,13 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        System.out.println("securityFilterChain@@@ 옴");
         http.csrf().disable();
         http.authorizeHttpRequests(config -> config.anyRequest().permitAll());
         http.oauth2Login(oauth2Configurer -> oauth2Configurer
                 .loginPage("/login")
                 .successHandler(successHandler())
+                .failureHandler(customAuthenticationFailureHandler)
                 .userInfoEndpoint()
                 .userService(oAuth2UserService));
 
