@@ -17,4 +17,5 @@ RUN ./gradlew clean build
 ENV DATABASE_URL=jdbc:mysql://mysql/krampoline
 
 # 빌드 결과 jar 파일을 실행
-CMD ["java", "-jar", "-Dspring.profiles.active=prod", "/home/gradle/project/build/libs/demo-0.0.1-SNAPSHOT.jar"]
+#CMD ["java", "-Dhttp.proxyHost=krmp-proxy.9rum.cc", "-Dhttp.proxyPort=3128","-Dhttps.proxyHost=krmp-proxy.9rum.cc", "-Dhttps.proxyPort=3128", "-Dspring.profiles.active=prod", "-jar", "Team12_BE-0.0.1-SNAPSHOT.jar"]
+CMD ["java", "-Dhttp.proxyHost=krmp-proxy.9rum.cc", "-Dhttp.proxyPort=3128","-Dhttps.proxyHost=krmp-proxy.9rum.cc", "-Dhttps.proxyPort=3128", "-jar",  "/home/gradle/project/build/libs/demo-0.0.1-SNAPSHOT.jar"]
