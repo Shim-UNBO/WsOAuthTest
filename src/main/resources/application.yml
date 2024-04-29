@@ -20,3 +20,9 @@ spring:
             scope:
               - profile_nickname
               - profile_image
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
+        web: DEBUG
