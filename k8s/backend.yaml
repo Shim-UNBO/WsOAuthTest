@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+spec:
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: harmony-pvc
+      containers:
+        - name: backend
+          image: krmp-d2hub-idock.9rum.cc/dev-test/repo_7b5cc908cf92
+          volumeMounts:
+            - name: data
+              mountPath: /tmp/images
+          env:
+            - name: TZ
+              value: Asia/Seoul
+            - name: MYSQL_DATABASE
+              value: krampoline
+            - name: DATABASE_URL
+              value: "jdbc:mysql://mysql:3306/$(MYSQL_DATABASE)?useSSL=false&allowPublicKeyRetrieval=TRUE&user=root"
+            - name: GOOGLE_URI
+              valueFrom:
+                secretKeyRef:
+                  name: secret-keys
+                  key: google-uri
+            - name: KAKAO_URI
+              valueFrom:
+                secretKeyRef:
+                  name: secret-keys
+                  key: kakao-uri
+            - name: NAVER_URI
+              valueFrom:
+                secretKeyRef:
+                  name: secret-keys
+                  key: naver-uri
+            - name: REDIRECT_URL
+              valueFrom:
+                secretKeyRef:
+                  name: secret-keys
+                  key: redirect-uri
+            - name: CHAT_URL
+              valueFrom:
+                secretKeyRef:
+                  name: secret-keys
+                  key: chat-url
+            - name: GPT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: secret-keys
+                  key: gpt-key
+          resources:
+            requests:
+              memory: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+spec:
+  selector:
+    app: backend
+  ports:
+    - port: 8080
+      targetPort: 8080
